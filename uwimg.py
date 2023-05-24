@@ -46,6 +46,15 @@ hsv_to_rgb.argtypes = [IMAGE]
 shift_image = lib.shift_image
 shift_image.argtypes = [IMAGE, c_int, c_float]
 
+scale_image = lib.scale_image
+scale_image.argtypes = [IMAGE, c_int, c_float]
+
+rgb_to_hcl = lib.rgb_to_hcl
+rgb_to_hcl.argtypes = [IMAGE]
+
+hcl_to_rgb = lib.hcl_to_rgb
+hcl_to_rgb.argtypes = [IMAGE]
+
 clamp_image = lib.clamp_image
 clamp_image.argtypes = [IMAGE]
 
