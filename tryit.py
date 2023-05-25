@@ -45,3 +45,8 @@ hsv_to_rgb(im)
 save_image(im, "dog_scale_saturated")
 
 
+im = load_image("data/dog.jpg")
+rgb_to_hcl(im)
+save_image(im, "RGB_TO_HCL")
+hcl_to_rgb(im)
+save_image(im, "HCL_TO_RGB")

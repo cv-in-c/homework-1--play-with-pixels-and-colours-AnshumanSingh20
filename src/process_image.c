@@ -202,30 +202,33 @@ void rgb_to_hcl(image im)
            else
            b = pow(((b + 0.055) / 1.055),2.4) ; 
              //RGB TO CIEXYZ
-        float X = 0.4124 * r + 0.3576 * g + 0.1805 * b;
-        float Y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-        float Z = 0.0193 * r + 0.1192 * g + 0.9505 * b;
+            float X = r * 0.4124564f + g * 0.3575761f + b * 0.1804375f;
+            float Y = r * 0.2126729f + g * 0.7151522f + b * 0.0721750f;
+            float Z = r * 0.0193339f + g * 0.1191920f + b * 0.9503041f;
               //CIEXYZ TO CIELUV
         float Yn = 1.00000;
         float u1 =(4*X)/(X + 15*Y + 3*Z);
         float v1 =(9*Y)/(X + 15*Y + 3*Z);
         float L;
-        if(Y/Yn<=pow(6/29,3))
-        L=pow(29/3,3)*Y/Yn;
+        if(Y/Yn<=pow(6.0/29,3))
+        L=pow(29.0/3,3)*Y/Yn;
         else
-        L=116*pow(Y/Yn,1/3)-16;
+        L=116*pow(Y/Yn,1.0/3)-16;
         float u=13*L*(u1-0.2009);
         float v=13*L*(v1-0.4610);
+        
         //CIELUV TO HCL
         float H = atan2(v,u)*(180.0/ 3.1416);
         if(H<0)
         H+=360.0;
         float C = sqrt(u * u + v * v);
         L=L;
-
+         
         im.data[i]=H;
         im.data[i+im.h*im.w]=C;
         im.data[i+2*im.h*im.w]=L;
+        
+        
     }
 }
 
@@ -236,26 +239,29 @@ void hcl_to_rgb(image im)
         float H=im.data[i];
         float C=im.data[i+im.h*im.w];
         float L=im.data[i+2*im.h*im.w];
+        
         //HCL TO CIELUV
         L=L;
-        float p=H*(3.1416/180.0);
+        float p=H*(3.14159265358/180.0);
         float U=cos(p)*C;
         float V=sin(p)*C;
+         
         //CIELUV TO CIEXYZ
          float u1=U/(13*L) + 0.2009;
          float v1=V/(13*L) + 0.4610;
          float X,Y,Z;
          float Yn=1.0000;
          if(L<=8)
-         Y=Yn*L*pow(3/29,3);
+         Y=Yn*L*pow(3.0/29,3);
          else
-         Y=Yn*pow((L+16)/116,3);
+         Y=Yn*powf((L+16)/116.0,3);
          X=Y*((9*u1)/(4*v1));
          Z=Y*((12-3*u1-20*v1)/(4*v1));
+        
          //CIEXYZ TO RGB
-         float r1 = 3.2406 * X - 1.5372 * Y - 0.4986 * Z;
-         float g1 = -0.9689 * X + 1.8758 * Y + 0.0415 * Z;
-         float b1 = 0.0557 * X - 0.2040 * Y + 1.0570 * Z;
+           float r1 = 3.2404542f * X - 1.5371385f * Y - 0.4985314f * Z;
+           float g1 = -0.9692660f * X + 1.8760108f * Y + 0.0415560f * Z;
+           float b1 = 0.0556434f * X - 0.2040259f * Y + 1.0572252f * Z;
          //Gamma Compression
          float r,g,b;
          if (r1<= 0.0031308)
